@@ -1,8 +1,10 @@
 const API = require("./lib/API")("./lib/db.json");
+// import { keyInSelect } from "readline-sync";
+// import { greenBright, red, blue } from "chalk";
 const readlineSync = require("readline-sync");
 const chalk = require("chalk");
 
-// Your code goes here!
+//Your code goes here!
 
 let selectedItems = {
     book: "",
@@ -119,7 +121,7 @@ const renderCountriesList = () => {
 	console.log('selected countries index ' + selectedCountriesIndex);	
 	if (selectedCountriesIndex !== countries.length) {
     selectedItems.nextTrip = countries[selectedCountriesIndex];
-    console.log("Your traveling to " + chalk.blue(selectedItems.nextTrip));    
+    console.log("You are traveling to " + chalk.blue(selectedItems.nextTrip));    
 	} else {
 	  topMenu();
 	}
@@ -129,8 +131,5 @@ const renderCountriesList = () => {
     renderCountriesList();
   }
 
-
-
-  
 
 
