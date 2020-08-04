@@ -2,10 +2,22 @@ const API = require("./lib/API")("./lib/db.json");
 const readlineSync = require("readline-sync");
 const chalk = require("chalk");
 
+
+//Global variables
+let userSelection= 0;
+let cars = API.read('cars');
+let userSelectedFromCarList = 0;
+
+
 // API inclusion
 //----------------------------------------------------------------
 // creating cars through the API create function
-    // API.create('cars', {make: "Ford focus"});
+    let addNewCar = () => {
+        let carMake = readlineSync.question("Type in car make and model");
+            let carAdded = API.create('cars', {make: carMake});
+            console.log(chalk.green(` ${carAdded } added to the list`));
+    }
+     
 
 // console.log(API.read('books'));
 // console.log(API.read('books', 1)); 
@@ -16,8 +28,6 @@ const chalk = require("chalk");
 // API.update("books", newBook);
 // console.log('books');
 
-let userSelection= 0;
-let cars = API.read('cars');
 
 // displaying cars
 let displayCars = (cars) => {
@@ -58,43 +68,55 @@ topMenu();
 if (userSelection == 1) {
     //Update the stock
 console.log(chalk.red('Press 6 to remove a car'));
-console.log(chalk.greenBright('Press 7 to add a car'));
+console.log(chalk.greenBright('Press 7 to replace a car with new one'));
+console.log(chalk.blueBright('Press 8 to add a new car to the collection'));
 const userSelectedFromCarList = readlineSync.question("Select your car");
+    // IF option 8 add a new car selected
+    if (userSelectedFromCarList ==8) {
+        addNewCar();
+    }
 console.log("User selected option " + userSelectedFromCarList) // testing only
 console.log("type of " + typeof userSelectedFromCarList); // testing only (string)
+    
     for (let car of cars) {
         if (userSelectedFromCarList == car.id) {
             console.log(chalk.blueBright(`***You selected ${car.make}***`));
             
         } 
     }
-        //unable to access object cars ASK Vasile
+        
     if (userSelectedFromCarList == 6) {
         displayCars(cars);
         let removingCar = readlineSync.question("Which car you want to remove");
         for (let car of cars) {
             // console.log("car of make " + car.make);
-            // console.log("car of make " + car.id); testing only
+            // console.log("car of id " + car.id); testing only
             if (removingCar == car.id) {
                 console.log("car id being removed " + car.id);
-                let removedCar = API.destroy(cars, car.removingCar);
-                console.log("You removed " + removedCar);
+                let removedCar = API.destroy("cars", car.id);
+                console.log("You removed " + car.make);
             }
         }
      } 
         //unable to access object cars ASK Vasile
     if (userSelectedFromCarList == 7) {
         console.log('user selected option 7 to add');
-        let newCar = readlineSync.question("write a new car's make");
-        if (newCar !== undefined && newCar === "string") {
-            console.log(`New car being added is ${newCar}`);
-            let carUpdate = API.read("cars", 5);
-            carUpdate.make = newCar;
+        displayCars(cars);
+        let replacedCarIndex = readlineSync.question("Which car do you want to replace");
+        console.log(`Car being replaced index is ${replacedCarIndex}`);
+        if (replacedCarIndex) {
+            // ask user to type in new replacing car make and model
+            let newAddCar = readlineSync.question("Provide us make and model of new addition of car");
+            console.log(chalk.inverse(newAddCar));
+            //updating through API function 
+            let carUpdate = API.read("cars", replacedCarIndex);
+            carUpdate.make = newAddCar;
             API.update("cars", carUpdate);
         }
 
     }      
 }
+
 
 
 
